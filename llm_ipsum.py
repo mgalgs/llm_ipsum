@@ -55,11 +55,13 @@ def llm_call(
     max_tokens,
     num_words,
     title,
+    timeout,
 ) -> dict[str, str] | None:
     """Call the LLM API to generate text."""
     client = OpenAI(
         base_url=api_base_url,
         api_key=api_key,
+        timeout=timeout,
     )
 
     try:
@@ -126,6 +128,12 @@ def main() -> int:
         action="store_true",
         help="Generate title text (no trailing punctuation; prefer noun phrases)",
     )
+    parser.add_argument(
+        "--timeout",
+        type=float,
+        default=7,
+        help="Timeout in seconds for the API call (default: 7)",
+    )
 
     args = parser.parse_args()
 
@@ -147,6 +155,7 @@ def main() -> int:
         max_tokens=token_estimate,
         num_words=args.length,
         title=args.title,
+        timeout=args.timeout,
     )
 
     if output:
