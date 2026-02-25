@@ -28,6 +28,12 @@ Requirements:
 - Prefer concrete objects, textures, and surprising pairings; write a statement, not an instruction.
 """
 
+SHORT_PHRASE_SYSTEM_PROMPT_APPEND = """\
+
+Additional requirements (short phrase):
+- For short phrases, avoid punctuation entirely.
+"""
+
 TITLE_SYSTEM_PROMPT_APPEND = """\
 
 Additional requirements (title text):
@@ -44,6 +50,8 @@ def gen_system_prompt(num_words: int, title: bool) -> str:
     prompt = BASE_SYSTEM_PROMPT.format(num_words=num_words)
     if title:
         prompt += TITLE_SYSTEM_PROMPT_APPEND
+    elif num_words < 10:
+        prompt += SHORT_PHRASE_SYSTEM_PROMPT_APPEND
     return prompt
 
 
