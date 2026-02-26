@@ -113,6 +113,10 @@ def guess_base_api_creds_from_env() -> tuple[str, str] | None:
     api_key = os.getenv("OPENAI_API_KEY")
 
     if not (base_url and api_key):
+        base_url = os.getenv("OPENROUTER_BASE_URL")
+        api_key = os.getenv("OPENROUTER_API_KEY")
+
+    if not (base_url and api_key):
         return None
 
     return (base_url, api_key)
@@ -153,7 +157,7 @@ def main() -> int:
     api_creds = guess_base_api_creds_from_env()
     if not api_creds:
         print(
-            "Error: No API credentials found. Please set OPENAI_BASE_URL and OPENAI_API_KEY environment variables.",
+            "Error: No API credentials found. Please set OPENAI_BASE_URL/OPENAI_API_KEY or OPENROUTER_BASE_URL/OPENROUTER_API_KEY.",
             file=sys.stderr,
         )
         return 1

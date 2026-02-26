@@ -4,7 +4,7 @@ Spiritual successor to lorem ipsum generators. Uses LLMs to generate placeholder
 
 ## Usage
 
-Set `OPENAI_BASE_URL` and `OPENAI_API_KEY` in your environment. `OPENAI_BASE_URL` can point to any OpenAI-compatible API server (e.g. OpenRouter).
+Set `OPENAI_BASE_URL` and `OPENAI_API_KEY` in your environment (can point to any OpenAI-compatible API server). Alternatively, set `OPENROUTER_BASE_URL` and `OPENROUTER_API_KEY` for OpenRouter.
 
 ```bash
 # 8 words
@@ -16,8 +16,8 @@ Set `OPENAI_BASE_URL` and `OPENAI_API_KEY` in your environment. `OPENAI_BASE_URL
 # 100 words in the given topic
 ./llm_ipsum.py 100 --topic "botany"
 
-# Use OpenRouter
-OPENAI_BASE_URL=$OPENROUTER_BASE_URL OPENAI_API_KEY=$OPENROUTER_API_KEY ./llm_ipsum.py 5
+# Use a specific model
+./llm_ipsum.py --model openai/gpt-4.1-nano 5
 ```
 
 ### Options
