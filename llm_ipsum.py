@@ -146,7 +146,10 @@ def main() -> int:
     args = parser.parse_args()
 
     prompt: str = gen_prompt(args.length, args.topic, title=args.title)
-    token_estimate: int = args.length * 5  # rough! Allowing for headroom.
+    # Reasoning models (e.g. minimax-m2.5) use reasoning tokens that count
+    # against max_tokens, so we need a generous budget beyond the actual
+    # output length to avoid empty content.
+    token_estimate: int = args.length * 5 + 500
     api_creds = guess_base_api_creds_from_env()
     if not api_creds:
         print(
