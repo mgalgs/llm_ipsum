@@ -11,6 +11,7 @@ Spiritual successor to lorem ipsum. Uses LLMs to generate placeholder text.
 """
 
 import argparse
+import random
 import sys
 import os
 
@@ -23,7 +24,7 @@ You are a placeholder text generator. Your task is to generate a string of place
 Requirements:
 - Output exactly {num_words} English words.
 - Favor novelty over familiarity (even if slightly bizarre/non-sensical).
-- Avoid overused "LLM-poetry" vocabulary (do not use any of these words): whisper, whispers, whispering, dreamy, dream, dreams, cloud, clouds, velvet.
+- Avoid overused "LLM-poetry" vocabulary (do not use any of these words): whisper, whispers, whispering, dreamy, dream, dreams, cloud, clouds, velvet, crimson.
 - Avoid corporate/process/computer phrasing (do not mention systems, parameters, documentation, data transfer; do not write requests like "please confirm").
 - Prefer concrete objects, textures, and surprising pairings; write a statement, not an instruction.
 """
@@ -42,8 +43,21 @@ Additional requirements (title text):
 """
 
 PROMPT_TEMPLATE = """\
-Instruction: Output exactly {num_words} words of placeholder text{style_hint} (loose topic guideline: {topic}) and *nothing* else.
+Instruction: Output exactly {num_words} words of placeholder text{style_hint}. Draw vocabulary from: {domain}. Output *nothing* else.
 """
+
+VOCAB_DOMAINS = [
+    "kitchen utensils", "deep ocean creatures", "desert geology",
+    "antique furniture", "tropical insects", "winter clothing",
+    "brass instruments", "root vegetables", "abandoned factories",
+    "circus equipment", "volcanic rock", "old bookshops",
+    "fishing tackle", "bread baking", "railway stations",
+    "carpentry tools", "tide pools", "alpine meadows",
+    "pottery glazes", "copper plumbing", "beekeeping",
+    "clock repair", "leather tanning", "paper mills",
+    "harbor docks", "seed catalogues", "blacksmithing",
+    "weaving looms", "cave formations", "market stalls",
+]
 
 
 def gen_system_prompt(num_words: int, title: bool) -> str:
@@ -101,9 +115,10 @@ def llm_call(
 
 def gen_prompt(num_words: int, topic: str, title: bool) -> str:
     style_hint = " suitable as a title" if title else ""
+    domain = topic if topic != "generic" else random.choice(VOCAB_DOMAINS)
     return PROMPT_TEMPLATE.format(
         num_words=num_words,
-        topic=topic,
+        domain=domain,
         style_hint=style_hint,
     )
 
